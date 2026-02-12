@@ -16,7 +16,7 @@ def simple_predict():
     print(f"Using device: {device}")
     
     # Import model
-    from models.unet import UNet
+    from src.models.unet import UNet
     model = UNet(n_channels=3, n_classes=1)
     model.to(device)
     model.eval()
