@@ -2,33 +2,30 @@
 # Training Configuration
 # ------------------------------
 experiment:
-  name: "segmentation_experiment"
+  name: "classification_experiment"
   seed: 42
-  use_gpu: true   # Set to true if using GPU in Colab
+  use_gpu: true
 
 paths:
-  train_images: "data/raw/seg_train/"
-  train_masks: "data/raw/seg_train/"
-  test_images: "data/raw/seg_test/"
+  train_images: "data/raw/seg_train/seg_train/"
+  test_images: "data/raw/seg_test/seg_test/"
   model_save: "models/"
   logs: "outputs/logs/"
-  predictions: "outputs/predictions/"
 
 data:
-  batch_size: 4       # Smaller batch size for small GPU memory
-  image_size: 256
+  batch_size: 16
+  image_size: 224        # Standard for ResNet
   val_split: 0.2
-  num_workers: 2      # Use >0 on Linux/Colab, 0 on Windows
+  num_workers: 2
   augmentations: true
 
 model:
-  name: "unet"
+  name: "resnet18"       # OR resnet34
   in_channels: 3
-  classes: 1          # Binary segmentation
+  num_classes: 6         # buildings, forest, glacier, mountain, sea, street
 
 training:
-  epochs: 50
-  learning_rate: 0.0001   # Reduced LR for stability
+  epochs: 30
+  learning_rate: 0.0001
   weight_decay: 0.0001
-  patience: 1000           # Very high to effectively disable early stopping
   optimizer: "adam"
