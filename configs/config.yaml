@@ -20,7 +20,7 @@ data:
   augmentations: true
 
 model:
-  name: "resnet18"       # OR resnet34
+  name: "unet"       # OR resnet34
   in_channels: 3
   num_classes: 6         # buildings, forest, glacier, mountain, sea, street
 
