@@ -1,34 +1,31 @@
-# ------------------------------
-# Training Configuration
-# ------------------------------
 experiment:
   name: "segmentation_experiment"
   seed: 42
-  use_gpu: true   # Set to true if using GPU in Colab
+  use_gpu: true
 
 paths:
-  train_images: "data/raw/seg_train/"
-  train_masks: "data/raw/seg_train/"
-  test_images: "data/raw/seg_test/"
+  train_images: "data/raw/seg_train/images/"
+  train_masks:  "data/raw/seg_train/masks/"
+  test_images:  "data/raw/seg_test/images/"
   model_save: "models/"
   logs: "outputs/logs/"
   predictions: "outputs/predictions/"
 
 data:
-  batch_size:       # Smaller batch size for small GPU memory
+  batch_size: 16
   image_size: 256
   val_split: 0.2
-  num_workers: 2      # Use >0 on Linux/Colab, 0 on Windows
+  num_workers: 2
   augmentations: true
 
 model:
   name: "unet"
   in_channels: 3
-  classes: 6         # Binary segmentation
+  classes: 6
 
 training:
   epochs: 50
-  learning_rate: 0.0001   # Reduced LR for stability
+  learning_rate: 0.0001
   weight_decay: 0.0001
-  patience: 1000           # Very high to effectively disable early stopping
+  patience: 10
   optimizer: "adam"
