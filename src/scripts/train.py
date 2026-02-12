@@ -12,13 +12,16 @@ import torch.nn.functional as F
 
 import segmentation_models_pytorch as smp
 
-def create_model(self) -> nn.Module:
+import segmentation_models_pytorch as smp
+
+def create_model(self):
     model = smp.Unet(
         encoder_name='resnet34',
         encoder_weights='imagenet',
         in_channels=3,
-        classes=1
+        classes=1   # binary segmentation
     )
+    return model
     # Freeze encoder for first 5 epochs (optional but recommended)
     for param in model.encoder.parameters():
         param.requires_grad = False

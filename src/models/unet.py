@@ -70,9 +70,9 @@ class Up(nn.Module):
 
 class OutConv(nn.Module):
     def __init__(self, in_channels, out_channels):
-        super(OutConv, self).__init__()
+        super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
-        nn.init.constant_(self.conv.bias, -3.0)   # ✅ CORRECT – no extra parentheses
+        nn.init.constant_(self.conv.bias, -3.0)   # ← ADD THIS
 
     def forward(self, x):
         return self.conv(x)
