@@ -1,0 +1,27 @@
+data:
+  augmentations: true
+  batch_size: 8
+  image_size: 256
+  num_workers: 0
+  val_split: 0.1
+experiment:
+  name: segmentation_experiment
+  seed: 42
+  use_gpu: false
+model:
+  classes: 1
+  in_channels: 3
+  name: unet
+paths:
+  logs: outputs/logs/
+  model_save: models/
+  predictions: outputs/predictions/
+  test_images: data/raw/seg_test/
+  train_images: data/raw/seg_train/
+  train_masks: data/raw/seg_train/
+training:
+  epochs: 10
+  learning_rate: 0.01
+  optimizer: adam
+  patience: 5
+  weight_decay: 0.0001

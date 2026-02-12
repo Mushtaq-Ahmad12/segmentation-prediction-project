@@ -1,0 +1,32 @@
+# Training Configuration
+experiment:
+  name: "segmentation_experiment"
+  seed: 42
+  use_gpu: false
+
+paths:
+  train_images: "data/raw/seg_train/"
+  train_masks: "data/raw/seg_train/"
+  test_images: "data/raw/seg_test/"
+  model_save: "models/"
+  logs: "outputs/logs/"
+  predictions: "outputs/predictions/"
+
+data:
+  batch_size: 32  # Small batch size for small dataset
+  image_size: 256
+  val_split: 0.2
+  num_workers: 0  # 0 for Windows compatibility
+  augmentations: true
+
+model:
+  name: "unet"
+  in_channels: 3
+  classes: 1  # Binary segmentation
+
+training:
+  epochs: 50  # Reduced for testing
+  learning_rate: 0.01
+  weight_decay: 0.0001
+  patience: 5
+  optimizer: "adam"
