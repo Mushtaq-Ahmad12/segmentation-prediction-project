@@ -139,28 +139,27 @@ def get_train_transforms(image_size: int = 256) -> A.Compose:
         A.HorizontalFlip(p=0.5),
         A.VerticalFlip(p=0.5),
         A.RandomRotate90(p=0.5),
-        A.Transpose(p=0.3),
+        A.Transpose(p=0.5),
         A.Affine(
-            translate_percent=(-0.15, 0.15),
-            scale=(0.8, 1.2),
-            rotate=(-45, 45),
-            p=0.7
+            translate_percent=(-0.2, 0.2),
+            scale=(0.7, 1.3),
+            rotate=(-90, 90),
+            p=0.8
         ),
-        A.RandomBrightnessContrast(brightness_limit=0.3, contrast_limit=0.3, p=0.5),
-        A.GaussNoise(var_limit=(10.0, 50.0), p=0.3),          # ✅ no 'mean'
-        A.GaussianBlur(blur_limit=(3, 5), p=0.2),
-        A.CLAHE(clip_limit=2.0, tile_grid_size=(8, 8), p=0.3),
+        A.RandomBrightnessContrast(brightness_limit=0.4, contrast_limit=0.4, p=0.7),
+        A.GaussNoise(var_limit=(20.0, 80.0), p=0.5),
+        A.GaussianBlur(blur_limit=(5, 7), p=0.3),
+        A.CLAHE(clip_limit=3.0, tile_grid_size=(8, 8), p=0.4),
         A.CoarseDropout(
-            num_holes=8,
-            hole_height_range=(0.0625, 0.125),
-            hole_width_range=(0.0625, 0.125),
+            num_holes=12,
+            hole_height_range=(0.1, 0.2),
+            hole_width_range=(0.1, 0.2),
             fill_value=0,
-            p=0.3
-        ),                                                    # ✅ modern arguments
+            p=0.5
+        ),
         A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
         ToTensorV2()
     ])
-
 
 def get_val_transforms(image_size: int = 256) -> A.Compose:
     """Get validation data transforms"""

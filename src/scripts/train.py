@@ -10,17 +10,18 @@ import os
 import segmentation_models_pytorch as smp
 import torch.nn.functional as F
 
+import segmentation_models_pytorch as smp
+
 def create_model(self) -> nn.Module:
-    model_config = self.config.get('model', {})
-    if model_config.get('name') == 'unet':
-        model = smp.Unet(
-            encoder_name='resnet34',
-            encoder_weights='imagenet',
-            in_channels=3,
-            classes=1
-        )
-    else:
-        raise ValueError(...)
+    model = smp.Unet(
+        encoder_name='resnet34',
+        encoder_weights='imagenet',
+        in_channels=3,
+        classes=1
+    )
+    # Freeze encoder for first 5 epochs (optional but recommended)
+    for param in model.encoder.parameters():
+        param.requires_grad = False
     return model
 
 # Add project root to path
