@@ -5,6 +5,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
 from pathlib import Path
 import sys
+import os
 
 # Add project root to path
 sys.path.append(str(Path(__file__).resolve().parents[2]))
@@ -12,13 +13,21 @@ from src.models.classifier import ResNetClassifier
 
 def main():
     # ===== CONFIGURATION =====
-    data_dir = "data/raw/seg_train"          # Your dataset path (contains class subfolders)
+    data_dir = "data/raw/seg_train"  # Points to folder with class subfolders
     batch_size = 64
     epochs = 20
     lr = 0.001
-    num_classes = 6
+    num_classes = 6  # buildings, forest, glacier, mountain, sea, street
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # ==========================
+
+    # Check if directory exists
+    if not os.path.exists(data_dir):
+        print(f"Error: Directory {data_dir} not found!")
+        print("Available directories in data/raw/:")
+        if os.path.exists("data/raw"):
+            print(os.listdir("data/raw"))
+        return
 
     # ---- Transforms ----
     train_transform = transforms.Compose([
@@ -36,11 +45,13 @@ def main():
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    # ---- Load dataset (this defines full_dataset) ----
+    # ---- Load dataset ----
     full_dataset = datasets.ImageFolder(data_dir, transform=train_transform)
-    print(f"Found {len(full_dataset)} images, classes: {full_dataset.classes}")
+    print(f"Found {len(full_dataset)} images")
+    print(f"Classes: {full_dataset.classes}")
+    print(f"Number of classes: {len(full_dataset.classes)}")
 
-    # ---- Train/Val Split ----
+    # ---- Train/Val Split (80/20) ----
     train_size = int(0.8 * len(full_dataset))
     val_size = len(full_dataset) - train_size
     train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
@@ -52,8 +63,8 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
-    # ---- Model (using weights='DEFAULT' to avoid warnings) ----
-    model = ResNetClassifier(num_classes=num_classes).to(device)
+    # ---- Model ----
+    model = ResNetClassifier(num_classes=len(full_dataset.classes)).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, factor=0.5)
@@ -110,5 +121,4 @@ def main():
     print(f"\nTraining complete. Best validation accuracy: {best_acc:.2f}%")
 
 if __name__ == '__main__':
-    # This guard is essential for Windows multiprocessing
     main()
