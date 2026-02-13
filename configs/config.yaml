@@ -4,9 +4,9 @@ experiment:
   use_gpu: true
 
 paths:
-  train_images: "data/raw/seg_train/seg_train/"   # <- point to folder WITH subfolders
-  train_masks: "data/raw/seg_train/seg_train/"   # only if masks exist; otherwise leave as is (will fail)
-  test_images:  "data/raw/seg_test/images/"
+  train_images: "data/raw/images/"
+  train_masks: "data/raw/annotations/trimaps/"
+  test_images: "data/raw/images/"
   model_save: "models/"
   logs: "outputs/logs/"
   predictions: "outputs/predictions/"
