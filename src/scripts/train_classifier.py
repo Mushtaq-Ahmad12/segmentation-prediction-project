@@ -17,16 +17,12 @@ def main():
     batch_size = 64
     epochs = 20
     lr = 0.001
-    num_classes = 6  # buildings, forest, glacier, mountain, sea, street
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # ==========================
 
     # Check if directory exists
     if not os.path.exists(data_dir):
         print(f"Error: Directory {data_dir} not found!")
-        print("Available directories in data/raw/:")
-        if os.path.exists("data/raw"):
-            print(os.listdir("data/raw"))
         return
 
     # ---- Transforms ----
@@ -67,7 +63,6 @@ def main():
     model = ResNetClassifier(num_classes=len(full_dataset.classes)).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, factor=0.5)
 
     # ---- Training Loop ----
     best_acc = 0.0
@@ -109,8 +104,6 @@ def main():
 
         print(f"Epoch {epoch+1}/{epochs} | Loss: {avg_loss:.4f} | "
               f"Train Acc: {train_acc:.2f}% | Val Acc: {val_acc:.2f}%")
-
-        scheduler.step(avg_loss)
 
         # Save best model
         if val_acc > best_acc:
