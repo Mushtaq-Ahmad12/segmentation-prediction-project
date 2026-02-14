@@ -70,9 +70,9 @@ def main():
     create_sample_images("data/raw/seg_test", num_images=5)
     
     # Copy sample configs if they don't exist
-    if not Path("configs/model_config.yaml").exists():
-        shutil.copy("configs/model_config.yaml.example", 
-                   "configs/model_config.yaml")
+    if not Path("configs/config.yaml").exists():
+        shutil.copy("configs/config.yaml.example", 
+                   "configs/config.yaml")
     
     print("\nSample data structure created successfully!")
     print("\nTo use the project:")
